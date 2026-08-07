@@ -4,7 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }} · Corrigo</title>
-  <meta name="description" content="{{ description or 'Evidence and sources behind every Corrigo post.' }}">
+  <meta name="description" content="{{ description or claim or 'Evidence and sources behind every Corrigo post.' }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml">
+  <meta property="og:type" content="{% if claim %}article{% else %}website{% endif %}">
+  <meta property="og:site_name" content="{{ site.name }}">
+  <meta property="og:title" content="{{ title }} · Corrigo">
+  <meta property="og:description" content="{{ description or claim or 'Evidence and sources behind every Corrigo post.' }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ title }} · Corrigo">
+  <meta name="twitter:description" content="{{ description or claim or 'Evidence and sources behind every Corrigo post.' }}">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -26,5 +36,18 @@
   <footer class="site-footer">
     <p>Corrigo — evidence and sources for every claim we make.</p>
   </footer>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", function (user) {
+        if (!user) {
+          window.netlifyIdentity.on("login", function () {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>

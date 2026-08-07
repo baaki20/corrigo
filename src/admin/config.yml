@@ -20,6 +20,7 @@ collections:
       - { label: "Platform", name: "platform", widget: "select", options: ["Instagram", "YouTube", "TikTok", "Other"], required: false }
       - { label: "Original post/video URL", name: "videoUrl", widget: "string", required: false }
       - { label: "The claim being addressed", name: "claim", widget: "text" }
+      - { label: "Verdict", name: "verdict", widget: "select", options: ["True", "Mostly True", "Misleading", "False", "Unverified"], default: "Unverified" }
       - label: "Sources"
         name: "sources"
         widget: "list"

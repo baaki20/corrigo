@@ -1,6 +1,29 @@
 ---
 layout: base.njk
 ---
+{% if claim and verdict %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClaimReview",
+  "url": "{{ site.url }}{{ page.url }}",
+  "datePublished": "{{ date | isoDate }}",
+  "claimReviewed": {{ claim | dump | safe }},
+  "author": {
+    "@type": "Organization",
+    "name": "{{ site.name }}",
+    "url": "{{ site.url }}"
+  },
+  "reviewRating": {
+    "@type": "Rating",
+    "ratingValue": {{ verdict | verdictRating }},
+    "bestRating": 5,
+    "worstRating": 1,
+    "alternateName": {{ verdict | dump | safe }}
+  }
+}
+</script>
+{% endif %}
 <article class="post">
   <p class="post-eyebrow">Evidence file</p>
   <h1>{{ title }}</h1>
@@ -13,6 +36,7 @@ layout: base.njk
   {% if claim %}
   <section class="post-block">
     <h2>The claim</h2>
+    {% if verdict %}<span class="verdict-badge verdict-{{ verdict | slug }}">{{ verdict }}</span>{% endif %}
     <p>{{ claim }}</p>
   </section>
   {% endif %}
