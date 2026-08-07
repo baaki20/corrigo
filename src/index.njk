@@ -9,9 +9,19 @@ title: Home
 </section>
 
 <section class="post-grid">
+  {% if collections.posts.length %}
+  <div class="filter-bar" role="group" aria-label="Filter by verdict">
+    <button type="button" class="filter-pill is-active" data-filter="all">All</button>
+    <button type="button" class="filter-pill" data-filter="true">True</button>
+    <button type="button" class="filter-pill" data-filter="mostly-true">Mostly true</button>
+    <button type="button" class="filter-pill" data-filter="misleading">Misleading</button>
+    <button type="button" class="filter-pill" data-filter="false">False</button>
+    <button type="button" class="filter-pill" data-filter="unverified">Unverified</button>
+  </div>
+  {% endif %}
   {% for post in collections.posts %}
-  <a class="post-card" href="{{ post.url }}">
-    <p class="post-card-eyebrow">{{ post.data.date | readableDate }}</p>
+  <a class="post-card" href="{{ post.url }}" data-verdict="{{ post.data.verdict | slug }}">
+    <p class="post-card-eyebrow">{{ post.data.date | readableDate }}{% if post.data.verdict %} · <span class="verdict-badge verdict-{{ post.data.verdict | slug }}">{{ post.data.verdict }}</span>{% endif %}</p>
     <h2>{{ post.data.title }}</h2>
     {% if post.data.claim %}<p class="post-card-claim">{{ post.data.claim }}</p>{% endif %}
     <span class="post-card-link">View evidence →</span>
@@ -20,3 +30,22 @@ title: Home
   <p class="empty-state">No posts yet — check back soon.</p>
   {% endfor %}
 </section>
+
+{% if collections.posts.length %}
+<script>
+(function () {
+  var buttons = document.querySelectorAll(".filter-pill");
+  var cards = document.querySelectorAll(".post-card");
+  buttons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      buttons.forEach(function (b) { b.classList.remove("is-active"); });
+      btn.classList.add("is-active");
+      var filter = btn.dataset.filter;
+      cards.forEach(function (card) {
+        card.style.display = filter === "all" || card.dataset.verdict === filter ? "" : "none";
+      });
+    });
+  });
+})();
+</script>
+{% endif %}

@@ -5,9 +5,10 @@ Built with Eleventy (static site generator) + Decap CMS (free, git-based login p
 
 ## What you get
 
-- `/` — list of all posts
-- `/posts/your-post/` — individual evidence page (claim, evidence, sources)
+- `/` — list of all posts, filterable by verdict (True, Mostly True, Misleading, False, Unverified)
+- `/posts/your-post/` — individual evidence page (claim, verdict, evidence, sources), with fact-check markup (schema.org ClaimReview) so search engines can show it as a fact check
 - `/admin` — login-protected panel to add/edit posts, no coding needed
+- `/feed.xml` and `/sitemap.xml` — so people and search engines can follow new posts
 
 ## 1. Push this to your GitHub
 

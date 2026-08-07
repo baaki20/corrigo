@@ -5,6 +5,7 @@ date: 2026-08-07
 platform: Instagram
 videoUrl: ""
 claim: "This is a placeholder claim. Replace it from the /admin panel or by editing this file directly."
+verdict: "Unverified"
 sources:
   - label: "Example source"
     url: "https://example.com"
