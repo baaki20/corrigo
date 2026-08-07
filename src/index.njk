@@ -1,0 +1,22 @@
+---
+layout: base.njk
+title: Home
+---
+<section class="hero">
+  <p class="hero-eyebrow">🔍 Evidence-based breakdowns</p>
+  <h1>You've probably misunderstood something.</h1>
+  <p class="hero-sub">Every claim in our videos and posts, backed by sources you can check yourself.</p>
+</section>
+
+<section class="post-grid">
+  {% for post in collections.posts %}
+  <a class="post-card" href="{{ post.url }}">
+    <p class="post-card-eyebrow">{{ post.data.date | readableDate }}</p>
+    <h2>{{ post.data.title }}</h2>
+    {% if post.data.claim %}<p class="post-card-claim">{{ post.data.claim }}</p>{% endif %}
+    <span class="post-card-link">View evidence →</span>
+  </a>
+  {% else %}
+  <p class="empty-state">No posts yet — check back soon.</p>
+  {% endfor %}
+</section>

@@ -1,0 +1,12 @@
+{
+  "name": "corrigo-site",
+  "version": "1.0.0",
+  "description": "Corrigo — evidence and sources for every post",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  }
+}

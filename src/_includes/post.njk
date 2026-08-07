@@ -1,0 +1,37 @@
+---
+layout: base.njk
+---
+<article class="post">
+  <p class="post-eyebrow">Evidence file</p>
+  <h1>{{ title }}</h1>
+  <p class="post-meta">{{ date | readableDate }}{% if platform %} · Posted on {{ platform }}{% endif %}</p>
+
+  {% if videoUrl %}
+  <p class="post-video"><a href="{{ videoUrl }}" target="_blank" rel="noopener">Watch the original video/post →</a></p>
+  {% endif %}
+
+  {% if claim %}
+  <section class="post-block">
+    <h2>The claim</h2>
+    <p>{{ claim }}</p>
+  </section>
+  {% endif %}
+
+  <section class="post-block">
+    <h2>The evidence</h2>
+    {{ content | safe }}
+  </section>
+
+  {% if sources and sources.length %}
+  <section class="post-block">
+    <h2>Sources</h2>
+    <ul class="sources-list">
+      {% for source in sources %}
+      <li><a href="{{ source.url }}" target="_blank" rel="noopener">{{ source.label or source.url }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <p class="back-link"><a href="/">← Back to all posts</a></p>
+</article>
