@@ -29,7 +29,7 @@ async function main() {
       conclusion: "Sources matter, but the quality of a claim also depends on context, methods, and what the evidence cannot show.",
       grade: EvidenceGrade.CONTEXT_DEPENDENT,
       body,
-      youtubeUrl: "https://www.youtube.com/",
+      youtubeUrl: "https://www.youtube.com/@corrigo_gh",
       status: DossierStatus.DRAFT,
       topics: { create: { topicId: topic.id } },
       sources: {
@@ -37,7 +37,7 @@ async function main() {
           title: "Corrigo research method (development note)",
           publisher: "Corrigo",
           type: SourceType.OTHER,
-          url: "https://www.youtube.com/",
+          url: "https://www.youtube.com/@corrigo_gh",
           note: "Replace this fixture source before publishing."
         }
       }

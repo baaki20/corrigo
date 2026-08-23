@@ -10,7 +10,7 @@ export function SiteHeader() {
       <nav aria-label="Main navigation">
         <Link href="/library">Library</Link>
         <Link href="/about/methodology">Method</Link>
-        <a href="https://www.youtube.com/" target="_blank" rel="noreferrer">YouTube ↗</a>
+        <a href="https://www.youtube.com/@corrigo_gh" target="_blank" rel="noreferrer">YouTube ↗</a>
       </nav>
     </header>
   );

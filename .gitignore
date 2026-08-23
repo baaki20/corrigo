@@ -8,3 +8,5 @@ tsconfig.tsbuildinfo
 # Local Netlify folder
 .netlify
 .prisma/
+
+.env

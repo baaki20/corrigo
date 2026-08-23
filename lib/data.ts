@@ -20,13 +20,13 @@ const demoDossiers: DossierRecord[] = [
     conclusion: "Sources matter, but the quality of a claim also depends on context, methods, and what the evidence cannot show.",
     grade: "CONTEXT_DEPENDENT",
     body: demoBody,
-    youtubeUrl: "https://www.youtube.com/",
+    youtubeUrl: "https://www.youtube.com/@corrigo_gh",
     status: "PUBLISHED",
     publishedAt: new Date("2026-08-18"),
     reviewedAt: new Date("2026-08-20"),
     topics: [{ name: "Media literacy", slug: "media-literacy" }],
     sources: [
-      { id: "source-1", title: "Corrigo research method", publisher: "Corrigo", type: "OTHER", url: "https://www.youtube.com/", note: "Development preview source." },
+      { id: "source-1", title: "Corrigo research method", publisher: "Corrigo", type: "OTHER", url: "https://www.youtube.com/@corrigo_gh", note: "Development preview source." },
     ],
   },
   {
@@ -38,13 +38,13 @@ const demoDossiers: DossierRecord[] = [
     conclusion: "Numbers need definitions, denominators, and a clear account of what was left out.",
     grade: "MISLEADING",
     body: demoBody,
-    youtubeUrl: "https://www.youtube.com/",
+    youtubeUrl: "https://www.youtube.com/@corrigo_gh",
     status: "PUBLISHED",
     publishedAt: new Date("2026-08-12"),
     reviewedAt: new Date("2026-08-19"),
     topics: [{ name: "Statistics", slug: "statistics" }],
     sources: [
-      { id: "source-2", title: "Understanding data in context", publisher: "Corrigo", type: "REFERENCE", url: "https://www.youtube.com/", note: "Development preview source." },
+      { id: "source-2", title: "Understanding data in context", publisher: "Corrigo", type: "REFERENCE", url: "https://www.youtube.com/@corrigo_gh", note: "Development preview source." },
     ],
   },
 ];
