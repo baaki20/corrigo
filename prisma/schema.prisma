@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EvidenceGrade {
+  SUPPORTED
+  MISLEADING
+  FALSE
+  UNCLEAR
+  CONTEXT_DEPENDENT
+}
+
+enum DossierStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SourceType {
+  PRIMARY_STUDY
+  OFFICIAL_SOURCE
+  REFERENCE
+  JOURNALISM
+  EXPERT_ANALYSIS
+  OTHER
+}
+
+model Dossier {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  title          String
+  summary        String
+  claim          String
+  conclusion     String
+  grade          EvidenceGrade
+  body           Json
+  youtubeUrl     String
+  status         DossierStatus  @default(DRAFT)
+  publishedAt    DateTime?
+  reviewedAt     DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  sources        Source[]
+  topics         DossierTopic[]
+  updates        DossierUpdate[]
+
+  @@index([status, publishedAt])
+  @@index([grade])
+}
+
+model Topic {
+  id       String         @id @default(cuid())
+  name     String         @unique
+  slug     String         @unique
+  dossiers DossierTopic[]
+}
+
+model DossierTopic {
+  dossierId String
+  topicId   String
+  dossier   Dossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  topic     Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([dossierId, topicId])
+}
+
+model Source {
+  id              String     @id @default(cuid())
+  dossierId       String
+  title           String
+  publisher       String
+  type            SourceType @default(OTHER)
+  url             String
+  publicationDate DateTime?
+  note            String?
+  sortOrder       Int        @default(0)
+  dossier         Dossier    @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId, sortOrder])
+}
+
+model DossierUpdate {
+  id         String   @id @default(cuid())
+  dossierId  String
+  reviewedAt DateTime
+  note       String
+  dossier    Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId, reviewedAt])
+}

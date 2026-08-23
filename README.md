@@ -1,71 +1,54 @@
-# Corrigo — evidence site
+# Corrigo evidence desk
 
-A simple site for posting the sources/evidence behind each Corrigo video or post.
-Built with Eleventy (static site generator) + Decap CMS (free, git-based login panel).
+Corrigo is a research platform for the evidence behind the Corrigo YouTube channel. It is a Next.js + Prisma full-stack app with a public evidence library and a private author dashboard.
 
-## What you get
+## Local development
 
-- `/` — list of all posts
-- `/posts/your-post/` — individual evidence page (claim, evidence, sources)
-- `/admin` — login-protected panel to add/edit posts, no coding needed
+Install dependencies and create a local PostgreSQL database, then configure:
 
-## 1. Push this to your GitHub
-
-From inside this folder:
-
-```
-git init
-git add .
-git commit -m "Initial Corrigo site"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/corrigo-site.git
-git push -u origin main
+```text
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/corrigo
+CORRIGO_ADMIN_EMAIL=you@example.com
+CORRIGO_ADMIN_PASSWORD=change-this
+AUTH_SECRET=use-a-long-random-string
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-(Create the empty `corrigo-site` repo on GitHub first, at github.com/new — don't
-initialize it with a README, or the push above will conflict.)
+Run the database setup and app:
 
-## 2. Deploy to Netlify (free)
-
-1. Go to https://app.netlify.com and sign up/log in with your GitHub account.
-2. Click **"Add new site" → "Import an existing project"**.
-3. Pick your `corrigo-site` repo. Netlify will auto-detect the build settings
-   from `netlify.toml` (build command `npm run build`, publish folder `_site`).
-4. Click **Deploy**. In a minute or two your site will be live at a
-   `random-name.netlify.app` URL (you can rename this or add your own domain
-   later, for free, under Site settings → Domain management).
-
-## 3. Turn on your login (Netlify Identity + Git Gateway)
-
-This is what lets you log into `/admin` and post evidence — no separate
-server or password system needed.
-
-1. In your Netlify site dashboard: **Site configuration → Identity → Enable Identity**.
-2. Under Identity settings, set **Registration** to "Invite only" (so random
-   people can't sign up).
-3. Still under Identity: **Services → Git Gateway → Enable Git Gateway**.
-4. Go to the **Identity** tab (top nav of your site dashboard) → **Invite users**
-   → enter your own email. You'll get an email invite — click it, set a
-   password.
-5. Now visit `https://your-site.netlify.app/admin` and log in with that
-   email/password. You're in.
-
-From then on, every post you publish through `/admin` gets committed straight
-to your GitHub repo, and Netlify automatically rebuilds the live site within
-about a minute.
-
-## 4. Add a post
-
-Either:
-- Log into `/admin` and click **New Post**, or
-- Add a markdown file directly to `src/posts/` following the format in
-  `src/posts/example-post.md`, then push to GitHub.
-
-## Local preview (optional)
-
-```
+```bash
 npm install
-npm start
+npm run db:push
+npm run db:seed
+npm run dev
 ```
 
-Opens the site at `http://localhost:8080`.
+Open `http://localhost:3000`. The private author desk is at `/admin`.
+
+## Available scripts
+
+- `npm run dev` — local development
+- `npm run build` — Prisma generation and production build
+- `npm run typecheck` — TypeScript validation
+- `npm run db:push` — apply the Prisma schema to a database
+- `npm run db:seed` — add the development fixture
+- `npm run db:studio` — open Prisma Studio
+
+## Content model
+
+Each dossier contains a claim, evidence grade, conclusion, visual evidence body, YouTube URL, topic, structured source cards, and review metadata. Drafts remain private until published.
+
+The development fixture is intentionally not a real investigation. Replace it with the first Corrigo dossier before launch.
+
+## Prisma Compute deployment
+
+Prisma Compute deploys from GitHub after a one-time connection between the Prisma project and this repository:
+
+```bash
+npx @prisma/cli@next auth login
+npx @prisma/cli@next init
+npx @prisma/cli@next project create corrigo
+npx @prisma/cli@next git connect https://github.com/baaki20/corrigo
+```
+
+Add the production variables in Prisma Compute, especially `DATABASE_URL`, `CORRIGO_ADMIN_EMAIL`, `CORRIGO_ADMIN_PASSWORD`, `AUTH_SECRET`, and `NEXT_PUBLIC_SITE_URL`. After the GitHub connection is complete, pushes to `main` deploy production and other branches deploy previews. See the [Prisma Compute GitHub integration](https://www.prisma.io/docs/compute/github).

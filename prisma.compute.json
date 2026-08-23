@@ -1,0 +1,10 @@
+{
+  "$schema": "https://prisma.io/schemas/compute.json",
+  "app": {
+    "name": "corrigo",
+    "framework": "nextjs",
+    "build": {
+      "command": "npm run build"
+    }
+  }
+}

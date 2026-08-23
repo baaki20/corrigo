@@ -1,12 +1,36 @@
 {
   "name": "corrigo-site",
-  "version": "1.0.0",
-  "description": "Corrigo — evidence and sources for every post",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Corrigo — evidence and sources behind every claim",
   "scripts": {
-    "build": "eleventy",
-    "start": "eleventy --serve"
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "@tiptap/extension-link": "^2.11.9",
+    "@tiptap/react": "^2.11.9",
+    "@tiptap/starter-kit": "^2.11.9",
+    "jose": "^6.0.10",
+    "next": "^15.5.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "prisma": "^6.19.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
   }
 }
