@@ -17,5 +17,5 @@ export function SiteHeader() {
 }
 
 export function SiteFooter() {
-  return <footer className="site-footer"><p>Corrigo researches the claim. You check the sources.</p><span>© {new Date().getFullYear()} Corrigo</span></footer>;
+  return <footer className="site-footer"><p>Corrigo researches the claim. You check the sources.</p><div className="footer-right"><nav className="social-links" aria-label="Corrigo social links"><span>Follow the desk</span><a href="https://www.youtube.com/@corrigo_gh" target="_blank" rel="noreferrer">YouTube ↗</a><a href="https://www.instagram.com/corrigo_gh/" target="_blank" rel="noreferrer">Instagram ↗</a><a href="https://www.tiktok.com/@corrigo_gh" target="_blank" rel="noreferrer">TikTok ↗</a></nav><span>© {new Date().getFullYear()} Corrigo</span></div></footer>;
 }

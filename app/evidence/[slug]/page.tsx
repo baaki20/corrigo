@@ -6,6 +6,7 @@ import { RichText } from "@/components/rich-text";
 import { getDossier, getDossiers } from "@/lib/data";
 import { displayDate, sourceTypeLabels } from "@/lib/types";
 import { getAdminSession } from "@/lib/auth";
+import { CopyLink } from "@/components/copy-link";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export default async function EvidencePage({ params, searchParams }: { params: P
   const related = (await getDossiers({ topic: dossier.topics[0]?.slug })).filter((item) => item.slug !== dossier.slug).slice(0, 2);
   return <main className="post">
     {canPreview && dossier.status !== "PUBLISHED" && <div className="preview-banner">Draft preview — this file is not public yet.</div>}
-    <header className="post-head"><span className="kicker">Evidence file / {dossier.topics[0]?.name || "Research"}</span><h1>{dossier.title}</h1><GradeBadge grade={dossier.grade} large /><p className="post-summary">{dossier.summary}</p><div className="post-meta"><span>Reviewed {displayDate(dossier.reviewedAt)}</span><span>·</span><span>{dossier.sources.length} sources</span></div><a className="video-link" href={dossier.youtubeUrl} target="_blank" rel="noreferrer">Watch the original Corrigo video ↗</a></header>
+    <header className="post-head"><span className="kicker">Evidence file / {dossier.topics[0]?.name || "Research"}</span><h1>{dossier.title}</h1><div className="post-verdict"><GradeBadge grade={dossier.grade} large /><CopyLink /></div><p className="post-summary">{dossier.summary}</p><div className="post-meta"><span>Reviewed {displayDate(dossier.reviewedAt)}</span><span>·</span><span>{dossier.sources.length} sources</span></div><a className="video-link" href={dossier.youtubeUrl} target="_blank" rel="noreferrer">Watch the original Corrigo video ↗</a></header>
     <section className="claim-box"><p>{dossier.claim}</p></section>
     <section className="evidence-layout"><div><h2>What the evidence says</h2><RichText body={dossier.body} /><div className="review-note"><strong>Corrigo’s conclusion:</strong> {dossier.conclusion}</div></div><aside className="source-rail"><h2>Sources / {dossier.sources.length}</h2>{dossier.sources.map((source, index) => <div className="source-card" key={source.id}><a href={source.url} target="_blank" rel="noreferrer">{index + 1}. {source.title} ↗</a><small>{source.publisher} · {sourceTypeLabels[source.type]}</small>{source.note && <p>{source.note}</p>}</div>)}</aside></section>
     {related.length > 0 && <section className="related"><div className="section-heading"><h2>Keep looking</h2><span className="kicker">Related files</span></div><div className="dossier-grid">{related.map((item, index) => <DossierCard dossier={item} index={index} key={item.id} />)}</div></section>}

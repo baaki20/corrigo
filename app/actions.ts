@@ -9,7 +9,9 @@ import { createAdminSession, clearAdminSession, requireAdmin } from "@/lib/auth"
 export async function login(formData: FormData) {
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
-  if (email !== (process.env.CORRIGO_ADMIN_EMAIL || "you@example.com") || password !== (process.env.CORRIGO_ADMIN_PASSWORD || "corrigo")) {
+  const configuredEmail = process.env.CORRIGO_ADMIN_EMAIL;
+  const configuredPassword = process.env.CORRIGO_ADMIN_PASSWORD;
+  if (!configuredEmail || !configuredPassword || email !== configuredEmail || password !== configuredPassword) {
     redirect("/admin/login?error=invalid");
   }
   await createAdminSession(email);
