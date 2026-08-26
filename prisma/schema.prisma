@@ -17,6 +17,7 @@ enum EvidenceGrade {
 
 enum DossierStatus {
   DRAFT
+  SCHEDULED
   PUBLISHED
   ARCHIVED
 }
@@ -41,6 +42,7 @@ model Dossier {
   body           Json
   youtubeUrl     String
   status         DossierStatus  @default(DRAFT)
+  scheduledAt    DateTime?
   publishedAt    DateTime?
   reviewedAt     DateTime?
   createdAt      DateTime       @default(now())

@@ -36,9 +36,18 @@ Open `http://localhost:3000`. The private author desk is at `/admin`.
 
 ## Content model
 
-Each dossier contains a claim, evidence grade, conclusion, visual evidence body, YouTube URL, topic, structured source cards, and review metadata. Drafts remain private until published.
+Each dossier contains a claim, evidence grade, conclusion, visual evidence body, YouTube URL, topic, structured source cards, review metadata, and optional publication scheduling. Drafts remain private until published.
 
 The development fixture is intentionally not a real investigation. Replace it with the first Corrigo dossier before launch.
+
+## Scheduling
+
+Choose **Schedule publication** in the admin editor and select a future time in your local timezone. A GitHub Actions workflow checks every five minutes and publishes dossiers that are due. Add these GitHub repository secrets:
+
+- `CORRIGO_SITE_URL` — the deployed Prisma app URL, without a trailing slash
+- `CRON_SECRET` — a long random value that must also be present in the Prisma production environment
+
+Prisma Compute does not currently provide native cron scheduling, so the protected endpoint and GitHub schedule provide the scheduler while the app remains hosted on Prisma.
 
 ## Prisma Compute deployment
 

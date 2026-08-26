@@ -60,7 +60,8 @@ export type DossierRecord = {
   grade: EvidenceGrade;
   body: RichTextNode;
   youtubeUrl: string;
-  status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
+  status: "DRAFT" | "SCHEDULED" | "PUBLISHED" | "ARCHIVED";
+  scheduledAt?: Date | null;
   publishedAt?: Date | null;
   reviewedAt?: Date | null;
   sources: SourceRecord[];

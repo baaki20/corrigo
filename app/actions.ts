@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { getDossierById } from "@/lib/data";
 import { createAdminSession, clearAdminSession, requireAdmin } from "@/lib/auth";
 
 export async function login(formData: FormData) {
@@ -34,14 +35,20 @@ export async function saveDossier(formData: FormData) {
   const title = String(formData.get("title") || "").trim();
   const slug = String(formData.get("slug") || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const youtubeUrl = String(formData.get("youtubeUrl") || "").trim();
+  const timing = String(formData.get("timing") || "DRAFT");
+  const scheduledInput = String(formData.get("scheduledAt") || "").trim();
   const topic = String(formData.get("topic") || "Media literacy").trim();
   const body = JSON.parse(String(formData.get("body") || '{"type":"doc","content":[]}'));
   const sourceData = JSON.parse(String(formData.get("sources") || "[]"));
   if (!process.env.DATABASE_URL) redirect("/admin?message=database-needed");
 
+  const existing = id ? await getDossierById(id) : null;
+  const scheduledAt = timing === "SCHEDULED" && scheduledInput ? new Date(scheduledInput) : null;
+  if (timing === "SCHEDULED" && (!scheduledAt || Number.isNaN(scheduledAt.getTime()) || scheduledAt <= new Date())) redirect("/admin?message=schedule-must-be-in-the-future");
+
   const topicSlug = topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const topicRecord = await prisma.topic.upsert({ where: { slug: topicSlug }, update: { name: topic }, create: { slug: topicSlug, name: topic } });
-  const values = {
+  const values: any = {
     title,
     slug,
     summary: String(formData.get("summary") || "").trim(),
@@ -50,6 +57,9 @@ export async function saveDossier(formData: FormData) {
     grade: String(formData.get("grade") || "UNCLEAR") as any,
     youtubeUrl,
     body,
+    status: timing === "PUBLISHED" ? "PUBLISHED" : timing === "SCHEDULED" ? "SCHEDULED" : "DRAFT",
+    scheduledAt,
+    publishedAt: timing === "PUBLISHED" ? existing?.publishedAt || new Date() : null,
   };
   const dossier = id ? await prisma.dossier.update({ where: { id }, data: values }) : await prisma.dossier.create({ data: values });
   await prisma.dossierTopic.deleteMany({ where: { dossierId: dossier.id } });

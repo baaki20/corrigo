@@ -60,6 +60,7 @@ const normalize = (d: any): DossierRecord => ({
   body: d.body as RichTextNode,
   youtubeUrl: d.youtubeUrl,
   status: d.status,
+  scheduledAt: d.scheduledAt,
   publishedAt: d.publishedAt,
   reviewedAt: d.reviewedAt,
   sources: (d.sources ?? []).sort((a: any, b: any) => a.sortOrder - b.sortOrder).map((s: any) => ({
@@ -70,7 +71,17 @@ const normalize = (d: any): DossierRecord => ({
 
 const include = { sources: true, topics: { include: { topic: true } } } as const;
 
+export async function publishDueDossiers() {
+  if (!process.env.DATABASE_URL) return 0;
+  const result = await prisma.dossier.updateMany({
+    where: { status: "SCHEDULED", scheduledAt: { lte: new Date() } },
+    data: { status: "PUBLISHED", publishedAt: new Date(), reviewedAt: new Date(), scheduledAt: null },
+  });
+  return result.count;
+}
+
 export async function getDossiers(options: { query?: string; topic?: string; grade?: string; includeDrafts?: boolean } = {}) {
+  await publishDueDossiers();
   if (!process.env.DATABASE_URL) {
     return demoDossiers.filter((d) => matches(d, options));
   }
@@ -96,6 +107,7 @@ const matches = (d: DossierRecord, options: { query?: string; topic?: string; gr
 };
 
 export async function getDossier(slug: string, includeDrafts = false) {
+  await publishDueDossiers();
   if (!process.env.DATABASE_URL) return demoDossiers.find((d) => d.slug === slug) ?? null;
   const row = await prisma.dossier.findFirst({ where: { slug, ...(includeDrafts ? {} : { status: "PUBLISHED" }) }, include });
   return row ? normalize(row) : null;
