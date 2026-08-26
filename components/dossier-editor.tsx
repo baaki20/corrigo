@@ -23,8 +23,14 @@ export function DossierEditor({ initial, action, id }: { initial?: any; action: 
   const sourcesJson = useMemo(() => JSON.stringify(sources), [sources]);
   const timing = initial?.status || "DRAFT";
   const updateSource = (index: number, key: keyof SourceDraft, value: string) => setSources((items) => items.map((item, i) => i === index ? { ...item, [key]: value } : item));
-  return <form action={action} className="editor-grid">
-    <input type="hidden" name="id" value={id || ""} /><input type="hidden" name="body" value={JSON.stringify(body)} /><input type="hidden" name="sources" value={sourcesJson} />
+  const prepareSchedule = (event: React.FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    const localInput = form.elements.namedItem("scheduledAt") as HTMLInputElement | null;
+    const utcInput = form.elements.namedItem("scheduledAtUtc") as HTMLInputElement | null;
+    utcInput!.value = localInput?.value ? new Date(localInput.value).toISOString() : "";
+  };
+  return <form action={action} onSubmit={prepareSchedule} className="editor-grid">
+    <input type="hidden" name="id" value={id || ""} /><input type="hidden" name="body" value={JSON.stringify(body)} /><input type="hidden" name="sources" value={sourcesJson} /><input type="hidden" name="scheduledAtUtc" />
     <div>
       <div className="field"><label htmlFor="title">Dossier title</label><input required id="title" name="title" defaultValue={initial?.title} placeholder="The sentence we need to look at again" /></div>
       <div className="field"><label htmlFor="slug">URL slug</label><input required id="slug" name="slug" defaultValue={initial?.slug} placeholder="the-sentence-we-need-to-look-at" /></div>

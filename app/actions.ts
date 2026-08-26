@@ -36,7 +36,7 @@ export async function saveDossier(formData: FormData) {
   const slug = String(formData.get("slug") || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const youtubeUrl = String(formData.get("youtubeUrl") || "").trim();
   const timing = String(formData.get("timing") || "DRAFT");
-  const scheduledInput = String(formData.get("scheduledAt") || "").trim();
+  const scheduledInput = String(formData.get("scheduledAtUtc") || formData.get("scheduledAt") || "").trim();
   const topic = String(formData.get("topic") || "Media literacy").trim();
   const body = JSON.parse(String(formData.get("body") || '{"type":"doc","content":[]}'));
   const sourceData = JSON.parse(String(formData.get("sources") || "[]"));
