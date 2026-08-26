@@ -81,7 +81,6 @@ export async function publishDueDossiers() {
 }
 
 export async function getDossiers(options: { query?: string; topic?: string; grade?: string; includeDrafts?: boolean } = {}) {
-  await publishDueDossiers();
   if (!process.env.DATABASE_URL) {
     return demoDossiers.filter((d) => matches(d, options));
   }
@@ -107,7 +106,6 @@ const matches = (d: DossierRecord, options: { query?: string; topic?: string; gr
 };
 
 export async function getDossier(slug: string, includeDrafts = false) {
-  await publishDueDossiers();
   if (!process.env.DATABASE_URL) return demoDossiers.find((d) => d.slug === slug) ?? null;
   const row = await prisma.dossier.findFirst({ where: { slug, ...(includeDrafts ? {} : { status: "PUBLISHED" }) }, include });
   return row ? normalize(row) : null;
