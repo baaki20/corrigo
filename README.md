@@ -44,7 +44,7 @@ The development fixture is intentionally not a real investigation. Replace it wi
 
 Choose **Schedule publication** in the admin editor and select a future time in your local timezone. A GitHub Actions workflow checks every five minutes and publishes dossiers that are due. Add these GitHub repository secrets:
 
-- `CORRIGO_SITE_URL` — the deployed Prisma app URL, without a trailing slash
+- `CORRIGO_SITE_URL` — the deployed Prisma production app URL, without a trailing slash. It must point to the same deployment whose `DATABASE_URL` contains your dossiers.
 - `CRON_SECRET` — a long random value that must also be present in the Prisma production environment
 
 Prisma Compute does not currently provide native cron scheduling, so the protected endpoint and GitHub schedule provide the scheduler while the app remains hosted on Prisma.

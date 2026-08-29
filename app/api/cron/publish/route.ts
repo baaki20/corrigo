@@ -7,6 +7,11 @@ export async function POST(request: Request) {
   const expected = process.env.CRON_SECRET;
   const authorization = request.headers.get("authorization");
   if (!expected || authorization !== `Bearer ${expected}`) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const published = await publishDueDossiers();
-  return NextResponse.json({ ok: true, published, at: new Date().toISOString() });
+  if (!process.env.DATABASE_URL) return NextResponse.json({ ok: false, error: "Database is not configured" }, { status: 503 });
+  try {
+    const published = await publishDueDossiers();
+    return NextResponse.json({ ok: true, published, at: new Date().toISOString() });
+  } catch {
+    return NextResponse.json({ ok: false, error: "Database is unavailable" }, { status: 503 });
+  }
 }
